@@ -8,6 +8,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     concurrency:
       group: crunchy
       cancel-in-progress: false
