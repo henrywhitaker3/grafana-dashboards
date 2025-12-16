@@ -21,7 +21,7 @@ jobs:
       - name: Download dashboard
         run: |
           mkdir crunchy || true
-          curl ${{ matrix.dashboard.url }} > ${{ matrix.dashboard.name }}.json
+          curl ${{ matrix.dashboard.url }} > crunchy/${{ matrix.dashboard.name }}.json
       - name: Update datasources
         run: |
           sed -i 's/"uid": "PROMETHEUS"/"uid": "${DS_PROMETHEUS}"/g' crunchy/${{ matrix.dashboard.name }}.json
