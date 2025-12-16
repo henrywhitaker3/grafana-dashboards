@@ -33,6 +33,8 @@ jobs:
             url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/refs/heads/main/kustomize/monitoring/grafana/dashboards/pgbouncer_direct.json
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
       - name: Download dashboard
         run: |
           mkdir crunchy || true
