@@ -1,0 +1,30 @@
+name: Crunchy PGO
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: crunchy
+      cancel-in-progress: false
+    strategy:
+      matrix:
+        dashboard:
+          - name: pgbackrest
+            url: https://raw.githubusercontent.com/CrunchyData/postgres-operator-examples/refs/heads/main/kustomize/monitoring/grafana/dashboards/pgbackrest.json
+    steps:
+      - uses: actions/checkout@v6
+      - name: Download dashboard
+        run: |
+          mkdir crunchy || true
+          curl ${{ matrix.dashboard.url }} > ${{ matrix.dashboard.name }}.json
+      - name: Update datasources
+        run: |
+          sed -i 's/"uid": "PROMETHEUS"/"uid": "${DS_PROMETHEUS}"/g' crunchy/${{ matrix.dashboard.name }}.json
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "fix(crunchy): update ${{ matrix.dashboard.name }}"
